@@ -1,7 +1,8 @@
 ---
 - name: Patching the linux system using patching roles
   hosts: all
-  become: true
+  become: true    
+  become_user: root
   vars:
     Patching_type: "NOREBOOT"
   roles:
