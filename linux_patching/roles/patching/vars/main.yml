@@ -3,6 +3,7 @@
 supported_distros:
   - CentOS
   - Rocky
+  - Ubuntu
 
 
 ip_address: "{{ ansible_default_ipv4.address }}"

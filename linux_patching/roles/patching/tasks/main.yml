@@ -4,11 +4,14 @@
   debug:
     msg: "Patching_type: {{ Patching_type }}"
 
-- name: Importing full patching
+- name: CentOS Importing full patching
   import_tasks: update_with_reboot.yml
-  when: Patching_type == "KERNEL"
+  when: Patching_type == "KERNEL" and ( ansible_distribution == "CentOS" or ansible_distribution == "Rocky" )
 
-- name: Importing NOREBOOT patching
+- name: CentOS Importing NOREBOOT patching
   import_tasks: update_NO_reboot.yml
-  when: Patching_type == "NOREBOOT"
+  when: Patching_type == "NOREBOOT" and ( ansible_distribution == "CentOS" or ansible_distribution == "Rocky" )
 
+- name: Ubuntu Importing NOREBOOT patching
+  import_tasks: update_NO_reboot_apt.yml
+  when: Patching_type == "NOREBOOT" and ansible_distribution == "Ubuntu"
