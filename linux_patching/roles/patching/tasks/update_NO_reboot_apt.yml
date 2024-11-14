@@ -114,29 +114,29 @@
 - name: "Log apt update progress"
   lineinfile:
     line: "DEBUG|HOSTNAME: {{ inventory_hostname }} | updating | {{ item }}"
-    dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.yum"
+    dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.apt"
     create: yes
   ignore_errors: true
   delegate_to: localhost
   loop: "{{ apt_result.results }}"
 
 - block:
-  - name: "Log if yum update failed"
+  - name: "Log if apt update failed"
     lineinfile:
-      line: "HOSTNAME: {{ inventory_hostname }} | yum update failed, PLEASE CHECK THE SERVER"
-      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.yum"
+      line: "HOSTNAME: {{ inventory_hostname }} | apt update failed, PLEASE CHECK THE SERVER"
+      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.apt"
       create: yes
     delegate_to: localhost
-  - name: "Yum failed"
+  - name: "apt failed"
     debug:
-      msg: "HOSTNAME: {{ inventory_hostname }} | yum update failed, PLEASE CHECK THE SERVER"
+      msg: "HOSTNAME: {{ inventory_hostname }} | apt update failed, PLEASE CHECK THE SERVER"
   when: apt_result is defined and apt_result is failed
 
 - block:
   - name: "Log if nothing to update"
     lineinfile:
       line: "HOSTNAME: {{ inventory_hostname }} |  Nothing to update."
-      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.yum"
+      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.apt"
       create: yes
     delegate_to: localhost
   - name: "nothing to update"
@@ -145,15 +145,15 @@
   when: apt_result is defined and apt_result is succeeded and not apt_result.changed
 
 - block:
-  - name: "Log if yum update success"
+  - name: "Log if apt update success"
     lineinfile:
-      line: "HOSTNAME: {{ inventory_hostname }} | yum update succeeded."
-      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.yum"
+      line: "HOSTNAME: {{ inventory_hostname }} | apt update succeeded."
+      dest: "{{ local_dir }}/update.{{ inventory_hostname }}.{{ timestamp }}.apt"
       create: yes
     delegate_to: localhost
   - name: "Update is done "
     debug:
-      msg: "HOSTNAME: {{ inventory_hostname }} | yum update succeeded."
+      msg: "HOSTNAME: {{ inventory_hostname }} | apt update succeeded."
   when: apt_result is defined and apt_result is succeeded and apt_result.changed
 
 ############################################################   
